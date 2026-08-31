@@ -1,122 +1,144 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import {
+  type ChangeEvent,
+  type ClipboardEventHandler,
+  type MouseEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import './App.css';
+
+const POSITIONS: Record<string, number | string>[] = [
+  { left: 0, top: 0, transform: 'unset' },
+  { right: 0, top: 0, transform: 'unset' },
+  { left: 0, bottom: 0, transform: 'unset' },
+  { right: 0, bottom: 0, transform: 'unset' },
+];
+
+const CORRECT_VALUE = 'IBS_Cringe_Design_Fest_2026';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const inputLoginRef = useRef<HTMLInputElement>(null);
+  const inputPswRef = useRef<HTMLInputElement>(null);
+
+  const [loginValue, setLoginValue] = useState('');
+
+  const handleChangeLoginValue = (e: ChangeEvent<HTMLInputElement>) => {
+    if (
+      e.target.value.length % 5 === 0 &&
+      CORRECT_VALUE.includes(e.target.value)
+    ) {
+      setIsOpenModal(true);
+      if (inputLoginRef.current) {
+        inputLoginRef.current.blur();
+      }
+    }
+    setLoginValue(e.target.value);
+  };
+
+  const [pswValue, setPswValue] = useState('');
+
+  const handleChangePswValue = (e: ChangeEvent<HTMLInputElement>) => {
+    if (
+      e.target.value.length % 4 === 0 &&
+      CORRECT_VALUE.includes(e.target.value)
+    ) {
+      setIsOpenModal(true);
+      if (inputPswRef.current) {
+        inputPswRef.current.blur();
+      }
+    }
+    setPswValue(e.target.value);
+  };
+
+  const [formPosition, setFormPosition] = useState<
+    Record<string, string | number>
+  >({ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' });
+
+  const handleSubmit: MouseEventHandler<HTMLButtonElement> = () => {
+    setIsOpenFinalModal(true);
+  };
+
+  useEffect(() => {
+    console.log(`initializing interval`);
+
+    const interval = setInterval(() => {
+      const randomPosition =
+        POSITIONS[Math.floor(Math.random() * POSITIONS.length)];
+      setFormPosition(randomPosition);
+    }, 5000);
+
+    return () => {
+      console.log(`clearing interval`);
+      clearInterval(interval);
+    };
+  }, []);
+
+  const handlePaste: ClipboardEventHandler<HTMLInputElement> = e => {
+    e.preventDefault();
+    alert('Чур вводить ручками!');
+  };
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const handleCloseModal = () => setIsOpenModal(false);
+
+  const [isOpenFinalModal, setIsOpenFinalModal] = useState(false);
+
+  const handleCloseFinalModal = () => setIsOpenFinalModal(false);
+
+  const isCorrect = loginValue === CORRECT_VALUE && pswValue === CORRECT_VALUE;
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <section id="center">
+      <div className="fields-wrapper" style={{ ...formPosition }}>
+        <label htmlFor="login">Введите логин</label>
+        <input
+          type="text"
+          id="login"
+          onChange={handleChangeLoginValue}
+          value={loginValue}
+          onPaste={handlePaste}
+          ref={inputLoginRef}
+        />
+        <label htmlFor="password">Введите пароль</label>
+        <input
+          type="password"
+          id="password"
+          onChange={handleChangePswValue}
+          value={pswValue}
+          onPaste={handlePaste}
+          ref={inputPswRef}
+        />
+        <button onClick={handleSubmit}>Вход</button>
+      </div>
+      {isOpenModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <span>Молодец, так держать!</span>
+            <button onClick={handleCloseModal}>Да, я молодец!</button>
+          </div>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
+      )}
+      {isOpenFinalModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <span>
+              {isCorrect ? 'Ура, всё верно' : 'Вы что-то ввели некорректно'}
+            </span>
+            {!isCorrect && (
+              <button
+                onClick={handleCloseFinalModal}
+                className="modal__close-btn"
+              >
+                Сейчас исправлюсь
+              </button>
+            )}
+          </div>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      )}
+    </section>
+  );
 }
 
-export default App
+export default App;
