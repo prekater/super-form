@@ -1,75 +1,22 @@
-# React + TypeScript + Vite
+# IBS Cringe Design Fest
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Екатерина Пронина
 
-Currently, two official plugins are available:
+## Запуск проекта
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+vite
 
-## React Compiler
+## Взаимодействие
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* Для визуального дискомфорта пользователя используется малоконтрастное сочетание цветов 
 
-## Expanding the ESLint configuration
+* Пользователь вводит с клавиатуры логин и пароль, вставить из буфера обмена нельзя для дополнительного неудобства
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* Для успокоения пользователя при вводе логина после каждого 5го символа (при вводе пароле - после 4го) - появляется модальное окно с сообщение о прогрессе
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+* Чтобы пользователь размял шею - форма перемещается из угла в угол рандомно каждые 5с
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* При перемещении, открытии модалок происходит потеря фокуса с поля ввода, чтобы пользователь сам не терял фокус и внимательность
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* При неуспешном вводе логина и/или пароля для закрытия модалки используется недружелюбная по размеру и цвету кнопка
 
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
