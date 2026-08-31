@@ -2,9 +2,33 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   gap: 16px;
   position: absolute;
+  width: 200px;
+}
+
+.input {
+  border: 1px solid var(--text);
+  border-radius: 4px;
+  color: var(--text);
+}
+
+.input:focus {
+  border: 1px solid white;
+  outline: 1px solid white;
+  border-radius: 4px;
+}
+
+.submit-btn {
+  background-color: var(--text);
+  border: 1px solid var(--text);
+  color: lightgray;
+  border-radius: 4px;
+  align-self: center;
+  font-size: 20px;
+  padding: 2px 6px;
+  cursor: pointer;
 }
 
 .modal-overlay {
@@ -29,7 +53,7 @@
   position: absolute;
   width: 300px;
   height: 200px;
-  background: lightslategray;
+  background: white;
 }
 
 .modal__close-btn {
@@ -37,6 +61,21 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  background: none;
+  border: none;
+  color: dimgray;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.modal__close-btn > svg {
+  width: 12px;
+  height: 12px;
+}
+
+.modal__close-btn > svg > path {
+  fill: dimgray;
 }
 
 #center {
